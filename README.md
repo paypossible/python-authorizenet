@@ -76,7 +76,6 @@ response = asyncio.run(my_async_func())
 By default the client is in sandbox mode. To go live:
 
 ```python
-import asyncio
 import authorizenet
 
 client = authorizenet.AsyncClient(
