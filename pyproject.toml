@@ -1,0 +1,62 @@
+[tool.poetry]
+name = "python-authorizenet"
+version = "0.1.0"
+description = "A typed Authorize.Net client using httpx and pydantic."
+authors = ["Michael Lavers <kolanos@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+classifiers = [
+	"Development Status :: 3 - Alpha",
+	"Intended Audience :: Developers",
+	"Topic :: Software Development :: Build Tools",
+    "License :: OSI Approved :: MIT License",
+	"Programming Language :: Python :: 3.9",
+	"Programming Language :: Python :: 3.10",
+	"Programming Language :: Python :: 3.11",
+	"Programming Language :: Python :: 3.12"
+]
+keywords = [ "authorizenet", "authorize.net", "payment", "ecommerce" ]
+include = ["LICENSE"]
+exclude = ["samples"]
+repository = "https://github.com/paypossible/python-authorizenet"
+packages = [
+    { include = "authorizenet" },
+]
+
+[project]
+dependencies = [
+    "httpx[http2]>=0",
+	"xsdata-pydantic[lxml]>=24",
+]
+requires-python = ">=3.9"
+
+[tool.poetry.dependencies]
+python = ">=3.9, <4"
+httpx = {extras = ["http2"], version = ">=0"}
+xsdata-pydantic = {extras = ["lxml"], version = ">=24"}
+
+[tool.poetry.group.dev.dependencies]
+black = "^25.1.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 120
+target-version = ['py312']
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
