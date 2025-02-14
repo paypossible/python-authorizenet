@@ -4207,9 +4207,7 @@ class TransactionResponse(BaseModel):
 
     class SplitTenderPayments(BaseModel):
         model_config = ConfigDict(defer_build=True)
-        split_tender_payment: list[
-            "TransactionResponse.SplitTenderPayments.SplitTenderPayment"
-        ] = field(
+        split_tender_payment: list["TransactionResponse.SplitTenderPayments.SplitTenderPayment"] = field(
             default_factory=list,
             metadata={
                 "name": "splitTenderPayment",
@@ -7699,15 +7697,13 @@ class ProfileTransactionType(BaseModel):
             "namespace": "AnetApi/xml/v1/schema/AnetApiSchema.xsd",
         },
     )
-    profile_trans_prior_auth_capture: Optional[ProfileTransPriorAuthCaptureType] = (
-        field(
-            default=None,
-            metadata={
-                "name": "profileTransPriorAuthCapture",
-                "type": "Element",
-                "namespace": "AnetApi/xml/v1/schema/AnetApiSchema.xsd",
-            },
-        )
+    profile_trans_prior_auth_capture: Optional[ProfileTransPriorAuthCaptureType] = field(
+        default=None,
+        metadata={
+            "name": "profileTransPriorAuthCapture",
+            "type": "Element",
+            "namespace": "AnetApi/xml/v1/schema/AnetApiSchema.xsd",
+        },
     )
     profile_trans_capture_only: Optional[ProfileTransCaptureOnlyType] = field(
         default=None,

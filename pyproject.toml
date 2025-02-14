@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "python-authorizenet"
-version = "0.1.0"
+version = "0.2.0"
 description = "A typed Authorize.Net client using httpx and pydantic."
 authors = ["Michael Lavers <kolanos@gmail.com>"]
 license = "MIT"
@@ -17,7 +17,7 @@ classifiers = [
 ]
 keywords = [ "authorizenet", "authorize.net", "payment", "ecommerce" ]
 include = ["LICENSE"]
-exclude = ["samples"]
+exclude = ["tests"]
 repository = "https://github.com/paypossible/python-authorizenet"
 packages = [
     { include = "authorizenet" },
@@ -38,6 +38,9 @@ xsdata-pydantic = {extras = ["lxml"], version = ">=24"}
 [tool.poetry.group.dev.dependencies]
 black = "^25.1.0"
 
+pytest = "^8.3.4"
+pytest-asyncio = "^0.25.3"
+pytest-httpx = "^0.35.0"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
