@@ -129,7 +129,17 @@ client = authorizenet.AsyncClient(
 )
 ```
 
+## Testing
+
+To run the tests:
+
+```python
+poetry run pytest
+```
+
+There are a growing number of examples in the [tests][4] directory.
 [0]: https://developer.authorize.net/api/reference/index.html
 [1]: https://www.python-httpx.org
 [2]: https://docs.pydantic.dev/latest/
 [3]: https://api.authorize.net/xml/v1/schema/anetapischema.xsd
+[4]: https://github.com/paypossible/python-authorizenet/tree/main/tests
