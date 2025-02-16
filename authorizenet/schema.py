@@ -1,5 +1,5 @@
 from decimal import Decimal
-from enum import Enum
+from enum import Enum as BaseEnum
 from typing import Optional
 
 from pydantic import BaseModel, ConfigDict
@@ -7,6 +7,11 @@ from xsdata.models.datatype import XmlDate, XmlDateTime
 from xsdata_pydantic.fields import field
 
 __NAMESPACE__ = "AnetApi/xml/v1/schema/AnetApiSchema.xsd"
+
+
+class Enum(BaseEnum):
+    def __repr__(self):
+        return f"{self.__class__.__name__}.{self.name}"
 
 
 class ArbgetSubscriptionListOrderFieldEnum(Enum):
@@ -2249,7 +2254,7 @@ class SettingType(BaseModel):
         name = "settingType"
 
     model_config = ConfigDict(defer_build=True)
-    setting_name: Optional[str] = field(
+    setting_name: Optional[SettingNameEnum] = field(
         default=None,
         metadata={
             "name": "settingName",
@@ -4038,6 +4043,13 @@ class TransactionResponse(BaseModel):
         default=None,
         metadata={
             "name": "prePaidCard",
+            "type": "Element",
+            "namespace": "AnetApi/xml/v1/schema/AnetApiSchema.xsd",
+        },
+    )
+    message: Optional["TransactionResponse.Messages.Message"] = field(
+        default=None,
+        metadata={
             "type": "Element",
             "namespace": "AnetApi/xml/v1/schema/AnetApiSchema.xsd",
         },
@@ -6856,7 +6868,7 @@ class TransactionDetailsType(BaseModel):
             "required": True,
         }
     )
-    transaction_type: str = field(
+    transaction_type: TransactionTypeEnum = field(
         metadata={
             "name": "transactionType",
             "type": "Element",
@@ -8163,7 +8175,7 @@ class TransactionRequestType(BaseModel):
         name = "transactionRequestType"
 
     model_config = ConfigDict(defer_build=True)
-    transaction_type: str = field(
+    transaction_type: TransactionTypeEnum = field(
         metadata={
             "name": "transactionType",
             "type": "Element",
