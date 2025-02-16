@@ -1,3 +1,4 @@
+import abc
 import importlib.metadata
 import logging
 
@@ -33,6 +34,7 @@ from .schema import (
     MerchantAuthenticationType,
 )
 from .serializer import serialize_xml
+from .typing import SyncAsync
 
 try:
     VERSION = importlib.metadata.version("authorizenet")
@@ -149,6 +151,10 @@ class BaseClient:
             self.logger.debug(e)
             return parse_xml(response.content, ErrorResponse)
 
+    @abc.abstractclassmethod
+    def request(self, request: AnetApiRequest, response_container: AnetApiResponse) -> SyncAsync[AnetApiResponse]:
+        raise NotImplementedError
+
 
 class Client(BaseClient):
     """Synchronous client for Authorize.net"""
@@ -195,7 +201,7 @@ class Client(BaseClient):
         """Close the connection pool of the current inner client."""
         self.client.close()
 
-    def request(self, request: AnetApiRequest, response_container: AnetApiResponse) -> AnetApiResponse:
+    def request(self, request: AnetApiRequest, response_container: AnetApiResponse) -> SyncAsync[AnetApiResponse]:
         http_request = self._build_request(request)
         http_response = self.client.send(http_request)
         http_response.raise_for_status()
@@ -235,7 +241,7 @@ class AsyncClient(BaseClient):
         """Close the connection pool of the current inner client."""
         await self.client.aclose()
 
-    async def request(self, request: AnetApiRequest, response_container: AnetApiResponse) -> AnetApiResponse:
+    async def request(self, request: AnetApiRequest, response_container: AnetApiResponse) -> SyncAsync[AnetApiResponse]:
         http_request = self._build_request(request)
         http_response = await self.client.send(http_request)
         http_response.raise_for_status()
