@@ -138,6 +138,7 @@ poetry run pytest
 ```
 
 There are a growing number of examples in the [tests][4] directory.
+
 [0]: https://developer.authorize.net/api/reference/index.html
 [1]: https://www.python-httpx.org
 [2]: https://docs.pydantic.dev/latest/
