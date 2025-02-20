@@ -50,12 +50,14 @@ def get_customer_profile_ids_request():
 def test_sync_customer_profile_create(httpx_mock_response, sync_client, create_customer_profile_request):
     response = sync_client.customer_profiles.create(create_customer_profile_request)
     assert isinstance(response, authorizenet.CreateCustomerProfileResponse)
+    assert response.messages.result_code == authorizenet.MessageTypeEnum.OK
 
 
 @pytest.mark.parametrize("httpx_mock_response", ["create_customer_profile_response.xml"], indirect=True)
 async def test_async_customer_profile_create(httpx_mock_response, async_client, create_customer_profile_request):
     response = await async_client.customer_profiles.create(create_customer_profile_request)
     assert isinstance(response, authorizenet.CreateCustomerProfileResponse)
+    assert response.messages.result_code == authorizenet.MessageTypeEnum.OK
 
 
 @pytest.mark.parametrize(
@@ -66,6 +68,7 @@ def test_sync_customer_profile_create_from_transaction(
 ):
     response = sync_client.customer_profiles.create_from_transaction(create_customer_profile_from_transaction_request)
     assert isinstance(response, authorizenet.CreateCustomerProfileResponse)
+    assert response.messages.result_code == authorizenet.MessageTypeEnum.OK
 
 
 @pytest.mark.parametrize(
@@ -78,39 +81,46 @@ async def test_async_customer_profile_create_from_transaction(
         create_customer_profile_from_transaction_request
     )
     assert isinstance(response, authorizenet.CreateCustomerProfileResponse)
+    assert response.messages.result_code == authorizenet.MessageTypeEnum.OK
 
 
 @pytest.mark.parametrize("httpx_mock_response", ["delete_customer_profile_response.xml"], indirect=True)
 def test_sync_customer_profile_delete(httpx_mock_response, sync_client, delete_customer_profile_request):
     response = sync_client.customer_profiles.delete(delete_customer_profile_request)
     assert isinstance(response, authorizenet.DeleteCustomerProfileResponse)
+    assert response.messages.result_code == authorizenet.MessageTypeEnum.OK
 
 
 @pytest.mark.parametrize("httpx_mock_response", ["delete_customer_profile_response.xml"], indirect=True)
 async def test_async_customer_profile_delete(httpx_mock_response, async_client, delete_customer_profile_request):
     response = await async_client.customer_profiles.delete(delete_customer_profile_request)
     assert isinstance(response, authorizenet.DeleteCustomerProfileResponse)
+    assert response.messages.result_code == authorizenet.MessageTypeEnum.OK
 
 
 @pytest.mark.parametrize("httpx_mock_response", ["get_customer_profile_response.xml"], indirect=True)
 def test_sync_customer_profile_get(httpx_mock_response, sync_client, get_customer_profile_request):
     response = sync_client.customer_profiles.get(get_customer_profile_request)
     assert isinstance(response, authorizenet.GetCustomerProfileResponse)
+    assert response.messages.result_code == authorizenet.MessageTypeEnum.OK
 
 
 @pytest.mark.parametrize("httpx_mock_response", ["get_customer_profile_response.xml"], indirect=True)
 async def test_async_customer_profile_get(httpx_mock_response, async_client, get_customer_profile_request):
     response = await async_client.customer_profiles.get(get_customer_profile_request)
     assert isinstance(response, authorizenet.GetCustomerProfileResponse)
+    assert response.messages.result_code == authorizenet.MessageTypeEnum.OK
 
 
 @pytest.mark.parametrize("httpx_mock_response", ["get_customer_profile_ids_response.xml"], indirect=True)
 def test_sync_customer_profile_get_ids(httpx_mock_response, sync_client, get_customer_profile_ids_request):
     response = sync_client.customer_profiles.get_ids(get_customer_profile_ids_request)
     assert isinstance(response, authorizenet.GetCustomerProfileIdsResponse)
+    assert response.messages.result_code == authorizenet.MessageTypeEnum.OK
 
 
 @pytest.mark.parametrize("httpx_mock_response", ["get_customer_profile_ids_response.xml"], indirect=True)
 async def test_async_customer_profile_get_ids(httpx_mock_response, async_client, get_customer_profile_ids_request):
     response = await async_client.customer_profiles.get_ids(get_customer_profile_ids_request)
     assert isinstance(response, authorizenet.GetCustomerProfileIdsResponse)
+    assert response.messages.result_code == authorizenet.MessageTypeEnum.OK

@@ -174,30 +174,35 @@ def charge_credit_card_request():
 def test_sync_authorize_credit_card(httpx_mock_response, sync_client, authorize_credit_card_request):
     response = sync_client.transactions.create(authorize_credit_card_request)
     assert isinstance(response, authorizenet.CreateTransactionResponse)
+    assert response.messages.result_code == authorizenet.MessageTypeEnum.OK
 
 
 @pytest.mark.parametrize("httpx_mock_response", ["authorize_credit_card_response.xml"], indirect=True)
 async def test_async_authorize_credit_card(httpx_mock_response, async_client, authorize_credit_card_request):
     response = await async_client.transactions.create(authorize_credit_card_request)
     assert isinstance(response, authorizenet.CreateTransactionResponse)
+    assert response.messages.result_code == authorizenet.MessageTypeEnum.OK
 
 
 @pytest.mark.parametrize("httpx_mock_response", ["capture_credit_card_response.xml"], indirect=True)
 def test_sync_capture_credit_card(httpx_mock_response, sync_client, capture_credit_card_request):
     response = sync_client.transactions.create(capture_credit_card_request)
     assert isinstance(response, authorizenet.CreateTransactionResponse)
+    assert response.messages.result_code == authorizenet.MessageTypeEnum.OK
 
 
 @pytest.mark.parametrize("httpx_mock_response", ["capture_credit_card_response.xml"], indirect=True)
 async def test_async_capture_credit_card(httpx_mock_response, async_client, capture_credit_card_request):
     response = await async_client.transactions.create(capture_credit_card_request)
     assert isinstance(response, authorizenet.CreateTransactionResponse)
+    assert response.messages.result_code == authorizenet.MessageTypeEnum.OK
 
 
 @pytest.mark.parametrize("httpx_mock_response", ["charge_credit_card_response.xml"], indirect=True)
 def test_sync_charge_credit_card(httpx_mock_response, sync_client, charge_credit_card_request):
     response = sync_client.transactions.create(charge_credit_card_request)
     assert isinstance(response, authorizenet.CreateTransactionResponse)
+    assert response.messages.result_code == authorizenet.MessageTypeEnum.OK
 
 
 @pytest.mark.parametrize("httpx_mock_response", ["charge_credit_card_response.xml"], indirect=True)

@@ -98,21 +98,25 @@ def get_hosted_profile_page_request():
 def test_sync_hostd_page_get_payment_page(httpx_mock_response, sync_client, get_hosted_payment_page_request):
     response = sync_client.hosted_pages.get_payment_page(get_hosted_payment_page_request)
     assert isinstance(response, authorizenet.GetHostedPaymentPageResponse)
+    assert response.messages.result_code == authorizenet.MessageTypeEnum.OK
 
 
 @pytest.mark.parametrize("httpx_mock_response", ["get_hosted_payment_page_response.xml"], indirect=True)
 async def test_async_hosted_page_get_payment_page(httpx_mock_response, async_client, get_hosted_payment_page_request):
     response = await async_client.hosted_pages.get_payment_page(get_hosted_payment_page_request)
     assert isinstance(response, authorizenet.GetHostedPaymentPageResponse)
+    assert response.messages.result_code == authorizenet.MessageTypeEnum.OK
 
 
 @pytest.mark.parametrize("httpx_mock_response", ["get_hosted_profile_page_response.xml"], indirect=True)
 def test_sync_hostd_page_get_profile_page(httpx_mock_response, sync_client, get_hosted_profile_page_request):
     response = sync_client.hosted_pages.get_profile_page(get_hosted_profile_page_request)
     assert isinstance(response, authorizenet.GetHostedProfilePageResponse)
+    assert response.messages.result_code == authorizenet.MessageTypeEnum.OK
 
 
 @pytest.mark.parametrize("httpx_mock_response", ["get_hosted_profile_page_response.xml"], indirect=True)
 async def test_async_hosted_page_get_profile_page(httpx_mock_response, async_client, get_hosted_profile_page_request):
     response = await async_client.hosted_pages.get_profile_page(get_hosted_profile_page_request)
     assert isinstance(response, authorizenet.GetHostedProfilePageResponse)
+    assert response.messages.result_code == authorizenet.MessageTypeEnum.OK
