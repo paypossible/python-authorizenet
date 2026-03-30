@@ -24,6 +24,7 @@ packages = [
 ]
 
 [project]
+name = "python-authorizenet"
 dependencies = [
     "httpx[http2]>=0",
 	"xsdata-pydantic[lxml]>=24",

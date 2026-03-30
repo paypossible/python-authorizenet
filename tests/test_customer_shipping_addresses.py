@@ -37,6 +37,26 @@ def get_customer_shipping_address_request():
     )
 
 
+@pytest.fixture(scope="module", autouse=True)
+def update_customer_shipping_address_request():
+    return authorizenet.UpdateCustomerShippingAddressRequest(
+        customer_profile_id=constants.customer_profile_id,
+        address=authorizenet.CustomerAddressExType(
+            first_name="John",
+            last_name="Doe",
+            company="Souveniropolis",
+            address="123 Main St.",
+            city="Bellevue",
+            state="WA",
+            zip="98004",
+            country="USA",
+            phone_number="000-000-0000",
+            customer_address_id=constants.customer_shipping_address_id,
+        ),
+        default_shipping_address=False,
+    )
+
+
 @pytest.mark.parametrize("httpx_mock_response", ["create_customer_shipping_address_response.xml"], indirect=True)
 def test_sync_customer_shipping_address_create(
     httpx_mock_response, sync_client, create_customer_shipping_address_request
@@ -86,3 +106,21 @@ async def test_async_customer_shipping_address_get(
 ):
     response = await async_client.customer_shipping_addresses.get(get_customer_shipping_address_request)
     assert isinstance(response, authorizenet.GetCustomerShippingAddressResponse)
+
+
+@pytest.mark.parametrize("httpx_mock_response", ["update_customer_shipping_address_response.xml"], indirect=True)
+def test_sync_customer_shipping_address_update(
+    httpx_mock_response, sync_client, update_customer_shipping_address_request
+):
+    response = sync_client.customer_shipping_addresses.update(update_customer_shipping_address_request)
+    assert isinstance(response, authorizenet.UpdateCustomerShippingAddressResponse)
+    assert response.messages.result_code == authorizenet.MessageTypeEnum.OK
+
+
+@pytest.mark.parametrize("httpx_mock_response", ["update_customer_shipping_address_response.xml"], indirect=True)
+async def test_async_customer_shipping_address_update(
+    httpx_mock_response, async_client, update_customer_shipping_address_request
+):
+    response = await async_client.customer_shipping_addresses.update(update_customer_shipping_address_request)
+    assert isinstance(response, authorizenet.UpdateCustomerShippingAddressResponse)
+    assert response.messages.result_code == authorizenet.MessageTypeEnum.OK

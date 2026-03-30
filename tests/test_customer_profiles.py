@@ -46,6 +46,18 @@ def get_customer_profile_ids_request():
     return authorizenet.GetCustomerProfileIdsRequest(ref_id="Sample")
 
 
+@pytest.fixture(scope="module", autouse=True)
+def update_customer_profile_request():
+    return authorizenet.UpdateCustomerProfileRequest(
+        profile=authorizenet.CustomerProfileInfoExType(
+            merchant_customer_id="custjdoe",
+            description="John2 Doe",
+            email="jdoe@mail.com",
+            customer_profile_id=constants.customer_profile_id,
+        ),
+    )
+
+
 @pytest.mark.parametrize("httpx_mock_response", ["create_customer_profile_response.xml"], indirect=True)
 def test_sync_customer_profile_create(httpx_mock_response, sync_client, create_customer_profile_request):
     response = sync_client.customer_profiles.create(create_customer_profile_request)
@@ -123,4 +135,18 @@ def test_sync_customer_profile_get_ids(httpx_mock_response, sync_client, get_cus
 async def test_async_customer_profile_get_ids(httpx_mock_response, async_client, get_customer_profile_ids_request):
     response = await async_client.customer_profiles.get_ids(get_customer_profile_ids_request)
     assert isinstance(response, authorizenet.GetCustomerProfileIdsResponse)
+    assert response.messages.result_code == authorizenet.MessageTypeEnum.OK
+
+
+@pytest.mark.parametrize("httpx_mock_response", ["update_customer_profile_response.xml"], indirect=True)
+def test_sync_customer_profile_update(httpx_mock_response, sync_client, update_customer_profile_request):
+    response = sync_client.customer_profiles.update(update_customer_profile_request)
+    assert isinstance(response, authorizenet.UpdateCustomerProfileResponse)
+    assert response.messages.result_code == authorizenet.MessageTypeEnum.OK
+
+
+@pytest.mark.parametrize("httpx_mock_response", ["update_customer_profile_response.xml"], indirect=True)
+async def test_async_customer_profile_update(httpx_mock_response, async_client, update_customer_profile_request):
+    response = await async_client.customer_profiles.update(update_customer_profile_request)
+    assert isinstance(response, authorizenet.UpdateCustomerProfileResponse)
     assert response.messages.result_code == authorizenet.MessageTypeEnum.OK

@@ -38,6 +38,53 @@ def get_customer_payment_profile_request():
     )
 
 
+@pytest.fixture(scope="module", autouse=True)
+def list_customer_payment_profile_request():
+    return authorizenet.GetCustomerPaymentProfileListRequest(
+        search_type=authorizenet.CustomerPaymentProfileSearchTypeEnum.CARDS_EXPIRING_IN_MONTH,
+        month="2025-12",
+        sorting=authorizenet.CustomerPaymentProfileSorting(
+            order_by=authorizenet.CustomerPaymentProfileOrderFieldEnum.ID,
+            order_descending=False,
+        ),
+        paging=authorizenet.Paging(limit=10, offset=1),
+    )
+
+
+@pytest.fixture(scope="module", autouse=True)
+def update_customer_payment_profile_request():
+    return authorizenet.UpdateCustomerPaymentProfileRequest(
+        customer_profile_id=constants.customer_profile_id,
+        payment_profile=authorizenet.CustomerPaymentProfileExType(
+            bill_to=authorizenet.CustomerAddressType(
+                first_name="John",
+                last_name="Doe",
+                company="Souveniropolis",
+                address="123 Main St.",
+                city="Bellevue",
+                state="WA",
+                zip="98004",
+                country="USA",
+                phone_number="000-000-0000",
+            ),
+            payment=authorizenet.PaymentType(
+                credit_card=authorizenet.CreditCardType(card_number="4111111111111111", expiration_date="2026-01")
+            ),
+            customer_payment_profile_id=constants.customer_payment_profile_id,
+        ),
+        validation_mode=authorizenet.ValidationModeEnum.LIVE_MODE,
+    )
+
+
+@pytest.fixture(scope="module", autouse=True)
+def validate_customer_payment_profile_request():
+    return authorizenet.ValidateCustomerPaymentProfileRequest(
+        customer_profile_id=constants.customer_profile_id,
+        customer_payment_profile_id=constants.customer_payment_profile_id,
+        validation_mode=authorizenet.ValidationModeEnum.LIVE_MODE,
+    )
+
+
 @pytest.mark.parametrize("httpx_mock_response", ["create_customer_payment_profile_response.xml"], indirect=True)
 def test_sync_customer_payment_profile_create(
     httpx_mock_response, sync_client, create_customer_payment_profile_request
@@ -99,3 +146,55 @@ async def test_async_customer_payment_profile_get(
 ):
     response = await async_client.customer_payment_profiles.get(get_customer_payment_profile_request)
     assert isinstance(response, authorizenet.GetCustomerPaymentProfileResponse)
+
+
+@pytest.mark.parametrize("httpx_mock_response", ["list_customer_payment_profile_response.xml"], indirect=True)
+def test_sync_customer_payment_profile_list(httpx_mock_response, sync_client, list_customer_payment_profile_request):
+    response = sync_client.customer_payment_profiles.list(list_customer_payment_profile_request)
+    assert isinstance(response, authorizenet.GetCustomerPaymentProfileListResponse)
+    assert response.messages.result_code == authorizenet.MessageTypeEnum.OK
+
+
+@pytest.mark.parametrize("httpx_mock_response", ["list_customer_payment_profile_response.xml"], indirect=True)
+async def test_async_customer_payment_profile_list(
+    httpx_mock_response, async_client, list_customer_payment_profile_request
+):
+    response = await async_client.customer_payment_profiles.list(list_customer_payment_profile_request)
+    assert isinstance(response, authorizenet.GetCustomerPaymentProfileListResponse)
+    assert response.messages.result_code == authorizenet.MessageTypeEnum.OK
+
+
+@pytest.mark.parametrize("httpx_mock_response", ["update_customer_payment_profile_response.xml"], indirect=True)
+def test_sync_customer_payment_profile_update(
+    httpx_mock_response, sync_client, update_customer_payment_profile_request
+):
+    response = sync_client.customer_payment_profiles.update(update_customer_payment_profile_request)
+    assert isinstance(response, authorizenet.UpdateCustomerPaymentProfileResponse)
+    assert response.messages.result_code == authorizenet.MessageTypeEnum.OK
+
+
+@pytest.mark.parametrize("httpx_mock_response", ["update_customer_payment_profile_response.xml"], indirect=True)
+async def test_async_customer_payment_profile_update(
+    httpx_mock_response, async_client, update_customer_payment_profile_request
+):
+    response = await async_client.customer_payment_profiles.update(update_customer_payment_profile_request)
+    assert isinstance(response, authorizenet.UpdateCustomerPaymentProfileResponse)
+    assert response.messages.result_code == authorizenet.MessageTypeEnum.OK
+
+
+@pytest.mark.parametrize("httpx_mock_response", ["validate_customer_payment_profile_response.xml"], indirect=True)
+def test_sync_customer_payment_profile_validate(
+    httpx_mock_response, sync_client, validate_customer_payment_profile_request
+):
+    response = sync_client.customer_payment_profiles.validate(validate_customer_payment_profile_request)
+    assert isinstance(response, authorizenet.ValidateCustomerPaymentProfileResponse)
+    assert response.messages.result_code == authorizenet.MessageTypeEnum.OK
+
+
+@pytest.mark.parametrize("httpx_mock_response", ["validate_customer_payment_profile_response.xml"], indirect=True)
+async def test_async_customer_payment_profile_validate(
+    httpx_mock_response, async_client, validate_customer_payment_profile_request
+):
+    response = await async_client.customer_payment_profiles.validate(validate_customer_payment_profile_request)
+    assert isinstance(response, authorizenet.ValidateCustomerPaymentProfileResponse)
+    assert response.messages.result_code == authorizenet.MessageTypeEnum.OK

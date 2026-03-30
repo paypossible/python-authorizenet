@@ -13,10 +13,10 @@
       <submitTimeUTC>2009-05-30T09:00:00</submitTimeUTC>
       <submitTimeLocal>2009-05-30T04:00:00</submitTimeLocal>
       <transactionStatus>settledSuccessfully</transactionStatus>
-      <invoice>INV00001</invoice>
+      <invoiceNumber>INV00001</invoiceNumber>
       <firstName>John</firstName>
       <lastName>Doe</lastName>
-      <amount>2.00</amount>
+
       <accountType>Visa</accountType>
       <accountNumber>XXXX1111</accountNumber>
       <settleAmount>2.00</settleAmount>
@@ -34,12 +34,13 @@
       <submitTimeUTC>2009-05-30T09:00:00</submitTimeUTC>
       <submitTimeLocal>2009-05-30T04:00:00</submitTimeLocal>
       <transactionStatus>settledSuccessfully</transactionStatus>
-      <invoice>INV00001</invoice>
+      <invoiceNumber>INV00001</invoiceNumber>
       <firstName>John</firstName>
       <lastName>Doe</lastName>
-      <amount>2.00</amount>
+
       <accountType>Visa</accountType>
       <accountNumber>XXXX1111</accountNumber>
+      <settleAmount>2.00</settleAmount>
       <marketType>eCommerce</marketType>
       <product>Card Not Present</product>
       <mobileDeviceId>2354578983274523978</mobileDeviceId>

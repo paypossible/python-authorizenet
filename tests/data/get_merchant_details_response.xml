@@ -11,6 +11,7 @@
     <processors>
         <processor>
             <name>First Data Nashville</name>
+            <id>1</id>
         </processor>
     </processors>
     <merchantName>fwHGwSdCaR</merchantName>
@@ -27,7 +28,7 @@
         <paymentMethod>Discover</paymentMethod>
         <paymentMethod>EnRoute</paymentMethod>
         <paymentMethod>JCB</paymentMethod>
-        <paymentMethod>Mastercard</paymentMethod>
+        <paymentMethod>MasterCard</paymentMethod>
         <paymentMethod>Visa</paymentMethod>
     </paymentMethods>
     <currencies>

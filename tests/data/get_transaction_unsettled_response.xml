@@ -38,7 +38,7 @@
       <settleAmount>0</settleAmount>
       <marketType>eCommerce</marketType>
       <product>Card Not Present</product>
-      <hasReturnedItemsSpecified>false</hasReturnedItemsSpecified>
+
     </transaction>
     <transaction>
       <transId>2149186958</transId>
@@ -53,7 +53,7 @@
       <settleAmount>0</settleAmount>
       <marketType>eCommerce</marketType>
       <product>Card Not Present</product>
-      <hasReturnedItemsSpecified>false</hasReturnedItemsSpecified>
+
     </transaction>
   </transactions>
   <totalNumInResultSet>3</totalNumInResultSet>

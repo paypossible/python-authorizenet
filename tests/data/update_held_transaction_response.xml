@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <updateHeldTransactionResponse
     xmlns="AnetApi/xml/v1/schema/AnetApiSchema.xsd">
+    <refId>12345</refId>
     <messages>
         <resultCode>Ok</resultCode>
         <message>
@@ -20,10 +21,11 @@
         <accountNumber>XXXX0015</accountNumber>
         <accountType>Mastercard</accountType>
         <messages>
-            <code>1</code>
-            <description>This transaction has been approved.</description>
+            <message>
+                <code>1</code>
+                <description>This transaction has been approved.</description>
+            </message>
         </messages>
         <transHashSha2>EFF9481A54853F79C37DF2602339102DBB15D9B42D56FC20373B2E48E6918D2FD4B8334C916301AF01E41A4FC7159FD434725BE9471DF285243F6B0A63A99F76</transHashSha2>
     </transactionResponse>
-    <refId>12345</refId>
 </updateHeldTransactionResponse>
