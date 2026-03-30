@@ -1,4 +1,5 @@
 import random
+from decimal import Decimal
 
 import authorizenet
 import pytest
@@ -54,6 +55,23 @@ def update_customer_profile_request():
             description="John2 Doe",
             email="jdoe@mail.com",
             customer_profile_id=constants.customer_profile_id,
+        ),
+    )
+
+
+@pytest.fixture(scope="module", autouse=True)
+def create_customer_profile_transaction_request():
+    return authorizenet.CreateCustomerProfileTransactionRequest(
+        transaction=authorizenet.ProfileTransactionType(
+            profile_trans_auth_capture=authorizenet.ProfileTransAuthCaptureType(
+                amount=Decimal("10.95"),
+                customer_profile_id=constants.customer_profile_id,
+                customer_payment_profile_id=constants.customer_payment_profile_id,
+                order=authorizenet.OrderExType(
+                    invoice_number="INV000001",
+                    description="Product Description",
+                ),
+            ),
         ),
     )
 
@@ -149,4 +167,22 @@ def test_sync_customer_profile_update(httpx_mock_response, sync_client, update_c
 async def test_async_customer_profile_update(httpx_mock_response, async_client, update_customer_profile_request):
     response = await async_client.customer_profiles.update(update_customer_profile_request)
     assert isinstance(response, authorizenet.UpdateCustomerProfileResponse)
+    assert response.messages.result_code == authorizenet.MessageTypeEnum.OK
+
+
+@pytest.mark.parametrize("httpx_mock_response", ["create_customer_profile_transaction_response.xml"], indirect=True)
+def test_sync_customer_profile_create_transaction(
+    httpx_mock_response, sync_client, create_customer_profile_transaction_request
+):
+    response = sync_client.customer_profiles.create_transaction(create_customer_profile_transaction_request)
+    assert isinstance(response, authorizenet.CreateCustomerProfileTransactionResponse)
+    assert response.messages.result_code == authorizenet.MessageTypeEnum.OK
+
+
+@pytest.mark.parametrize("httpx_mock_response", ["create_customer_profile_transaction_response.xml"], indirect=True)
+async def test_async_customer_profile_create_transaction(
+    httpx_mock_response, async_client, create_customer_profile_transaction_request
+):
+    response = await async_client.customer_profiles.create_transaction(create_customer_profile_transaction_request)
+    assert isinstance(response, authorizenet.CreateCustomerProfileTransactionResponse)
     assert response.messages.result_code == authorizenet.MessageTypeEnum.OK

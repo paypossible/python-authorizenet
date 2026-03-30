@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "python-authorizenet"
-version = "0.2.0"
+version = "0.3.0"
 description = "A typed Authorize.Net client using httpx and pydantic."
 authors = ["Michael Lavers <kolanos@gmail.com>"]
 license = "MIT"

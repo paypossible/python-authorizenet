@@ -373,6 +373,14 @@ def accept_nonce_request():
 
 
 @pytest.fixture(scope="module", autouse=True)
+def send_receipt_request():
+    return authorizenet.SendCustomerTransactionReceiptRequest(
+        trans_id=constants.transaction_id,
+        customer_email="customer@example.com",
+    )
+
+
+@pytest.fixture(scope="module", autouse=True)
 def get_transaction_details_request():
     return authorizenet.GetTransactionDetailsRequest(
         trans_id=constants.transaction_id,
@@ -705,4 +713,21 @@ def test_sync_update_split_tender_group(httpx_mock_response, sync_client, update
 async def test_async_update_split_tender_group(httpx_mock_response, async_client, update_split_tender_group_request):
     response = await async_client.transactions.update_split_tender_group(update_split_tender_group_request)
     assert isinstance(response, authorizenet.UpdateSplitTenderGroupResponse)
+    assert response.messages.result_code == authorizenet.MessageTypeEnum.OK
+
+
+# Send customer transaction receipt tests
+
+
+@pytest.mark.parametrize("httpx_mock_response", ["send_customer_transaction_receipt_response.xml"], indirect=True)
+def test_sync_send_receipt(httpx_mock_response, sync_client, send_receipt_request):
+    response = sync_client.transactions.send_receipt(send_receipt_request)
+    assert isinstance(response, authorizenet.SendCustomerTransactionReceiptResponse)
+    assert response.messages.result_code == authorizenet.MessageTypeEnum.OK
+
+
+@pytest.mark.parametrize("httpx_mock_response", ["send_customer_transaction_receipt_response.xml"], indirect=True)
+async def test_async_send_receipt(httpx_mock_response, async_client, send_receipt_request):
+    response = await async_client.transactions.send_receipt(send_receipt_request)
+    assert isinstance(response, authorizenet.SendCustomerTransactionReceiptResponse)
     assert response.messages.result_code == authorizenet.MessageTypeEnum.OK

@@ -30,7 +30,7 @@ tests/
   conftest.py       # Fixtures: sync_client, async_client, httpx_mock_response (indirect parametrize)
   constants.py      # Fake credentials and IDs for tests
   data/             # 100+ XML fixture files (request/response pairs for mocked tests)
-  test_*.py         # 5 test modules, 32 tests total (16 sync + 16 async)
+  test_*.py         # 9 test modules, 92 tests total (46 sync + 46 async)
 ```
 
 ## Architecture
@@ -134,9 +134,21 @@ Request objects are defined as `scope="module"`, `autouse=True` fixtures. They c
 
 ### Test Coverage
 
-**Covered:** transactions (auth/capture/charge), customer profiles (CRUD + from_transaction + get_ids), customer payment profiles (create/delete/get), customer shipping addresses (create/delete/get), hosted pages (payment + profile).
+92 tests (46 sync + 46 async) across 9 test modules:
 
-**Not covered (XML data exists):** subscriptions, batches, account updater jobs, merchant details, refunds, voids, bank account operations, transaction listings, held transaction updates, split tender, mobile devices, secure payment containers, error responses.
+| Module | Operations Tested |
+|--------|-------------------|
+| `test_transactions.py` | auth, capture, charge, refund, void, debit bank account, credit bank account, charge customer profile, charge tokenized card, accept nonce, get details, list, list for customer, list unsettled, update held, update split tender |
+| `test_customer_profiles.py` | create, create from transaction, delete, get, get IDs, update |
+| `test_customer_payment_profiles.py` | create, delete, get, list, update, validate |
+| `test_customer_shipping_addresses.py` | create, delete, get, update |
+| `test_subscriptions.py` | create, create from profile, get, get status, update, cancel, list |
+| `test_batches.py` | get statistics, list settled |
+| `test_account_updater_jobs.py` | get details, get summary |
+| `test_merchants.py` | get |
+| `test_hosted_pages.py` | get payment page, get profile page |
+
+**Not covered:** mobile devices (login/register), secure payment containers (create), merchant update, customer profile create_transaction, send transaction receipt, error response handling, decrypt payment data, is_alive, logout, test_authenticate.
 
 ## Adding a New Operation Test
 

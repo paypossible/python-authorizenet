@@ -136,7 +136,8 @@ class BaseClient:
         self._clients.append(client)
 
     def _build_request(self, request: AnetApiRequest) -> httpx.Request:
-        request.merchant_authentication = self.merchant_authentication
+        if isinstance(request, AnetApiRequest):
+            request.merchant_authentication = self.merchant_authentication
         content = serialize_xml(request)
         self.logger.info(f"POST {self.client.base_url}")
         self.logger.debug(f"=> {str(content)}")
