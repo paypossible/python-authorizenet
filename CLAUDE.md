@@ -99,15 +99,7 @@ Other supported methods: `session_token`, `password`, `impersonation_authenticat
 
 2. **XML namespace is critical.** Serialization sets `ns_map={None: "AnetApi/xml/v1/schema/AnetApiSchema.xsd"}`. Changing or omitting this will cause Authorize.Net to reject requests.
 
-3. **`Client.__init__` type hint bug** (`client.py:166`): Parameter `client` is typed as `Optional[httpx.AsyncClient]` but should be `Optional[httpx.Client]`. Does not affect runtime.
-
-4. **`@abc.abstractclassmethod`** (`client.py:154`): Uses the deprecated decorator. Still functional but may emit deprecation warnings. Should be `@abc.abstractmethod`.
-
-5. **Dead code**: `Client.send_request()` (`client.py:178-184`) and `Client.__aenter__()` (`client.py:174-176`) appear to be leftover/unused methods. The actual request path goes through `Client.request()` (`client.py:204-208`).
-
-6. **`pytest-xdist` not in dev dependencies.** `pytest.ini` sets `addopts = ["-n auto"]` which requires pytest-xdist, but it's not listed in `pyproject.toml`. If tests fail with "unrecognized arguments: -n", run: `poetry add --group dev pytest-xdist`.
-
-7. **`asyncio_mode = auto`** in `pytest.ini` means async test functions are automatically treated as async tests without needing `@pytest.mark.asyncio`.
+3. **`asyncio_mode = auto`** in `pytest.ini` means async test functions are automatically treated as async tests without needing `@pytest.mark.asyncio`.
 
 ## Testing Patterns
 
@@ -178,5 +170,7 @@ Request objects are defined as `scope="module"`, `autouse=True` fixtures. They c
 | `pytest` (dev) | Test framework |
 | `pytest-asyncio` (dev) | Async test support, auto mode |
 | `pytest-httpx` (dev) | httpx response mocking |
+| `pytest-xdist` (dev) | Parallel test execution (`-n auto`) |
+| `flake8` (dev) | Linter (max-line-length 120, max-complexity 10) |
 | `mypy` (dev) | Static type checker (Python >=3.10 only) |
 | `pydantic[mypy]` (dev) | Pydantic mypy plugin for model-aware type checking |
