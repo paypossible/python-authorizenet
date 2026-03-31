@@ -4,10 +4,11 @@ import logging
 
 from dataclasses import dataclass
 from types import TracebackType
-from typing import Any, Dict, List, Optional, Type, Union
+from typing import Any, Dict, List, Optional, Type, TypeVar, Union, cast
 
 import httpx
 import pydantic
+from pydantic import BaseModel
 
 from .logger import make_console_logger
 from .operation import (
@@ -40,6 +41,8 @@ try:
     VERSION = importlib.metadata.version("authorizenet")
 except importlib.metadata.PackageNotFoundError:
     VERSION = "0.2.0"
+
+R = TypeVar("R", bound=AnetApiResponse)
 
 
 @dataclass
@@ -125,6 +128,7 @@ class BaseClient:
 
     @client.setter
     def client(self, client: Union[httpx.Client, httpx.AsyncClient]) -> None:
+        assert self.options.base_url is not None
         client.base_url = httpx.URL(self.options.base_url)
         client.timeout = httpx.Timeout(timeout=self.options.timeout_ms / 1_000)
         client.headers = httpx.Headers(
@@ -135,7 +139,7 @@ class BaseClient:
         )
         self._clients.append(client)
 
-    def _build_request(self, request: AnetApiRequest) -> httpx.Request:
+    def _build_request(self, request: Union[AnetApiRequest, BaseModel]) -> httpx.Request:
         if isinstance(request, AnetApiRequest):
             request.merchant_authentication = self.merchant_authentication
         content = serialize_xml(request)
@@ -143,17 +147,17 @@ class BaseClient:
         self.logger.debug(f"=> {str(content)}")
         return self.client.build_request("POST", "", content=content)
 
-    def _parse_response(self, response: httpx.Response, response_container: AnetApiResponse) -> AnetApiResponse:
+    def _parse_response(self, response: httpx.Response, response_container: Type[R]) -> R:
         self.logger.debug(f"<= {response.text}")
         try:
-            return parse_xml(response.content, response_container)
+            return cast(R, parse_xml(response.content, response_container))
         except pydantic.ValidationError as e:
             self.logger.error(f"<= {response.text}")
             self.logger.debug(e)
-            return parse_xml(response.content, ErrorResponse)
+            return cast(R, parse_xml(response.content, ErrorResponse))
 
-    @abc.abstractclassmethod
-    def request(self, request: AnetApiRequest, response_container: AnetApiResponse) -> SyncAsync[AnetApiResponse]:
+    @abc.abstractmethod
+    def request(self, request: Union[AnetApiRequest, BaseModel], response_container: Type[R]) -> SyncAsync[R]:
         raise NotImplementedError
 
 
@@ -164,25 +168,13 @@ class Client(BaseClient):
 
     def __init__(
         self,
-        client: Optional[httpx.AsyncClient] = None,
+        client: Optional[httpx.Client] = None,
         options: Optional[Union[Dict[str, Any], ClientOptions]] = None,
         **kwargs: Any,
     ) -> None:
         if client is None:
             client = httpx.Client()
         super().__init__(client, options, **kwargs)
-
-    async def __aenter__(self) -> "AsyncClient":
-        self.client = httpx.AsyncClient()
-        await self.client.__aenter__()
-
-    def send_request(self, request: AnetApiRequest, response_container: AnetApiResponse) -> AnetApiResponse:
-        request.merchant_authentication = self.merchant_authentication
-        content = serialize_xml(request)
-        with httpx.Client(**self.client_config) as client:
-            response = client.post("", content=content)
-        response.raise_for_status()
-        return parse_xml(response.content, response_container)
 
     def __enter__(self) -> "Client":
         self.client = httpx.Client()
@@ -202,7 +194,7 @@ class Client(BaseClient):
         """Close the connection pool of the current inner client."""
         self.client.close()
 
-    def request(self, request: AnetApiRequest, response_container: AnetApiResponse) -> SyncAsync[AnetApiResponse]:
+    def request(self, request: Union[AnetApiRequest, BaseModel], response_container: Type[R]) -> R:
         http_request = self._build_request(request)
         http_response = self.client.send(http_request)
         http_response.raise_for_status()
@@ -242,7 +234,7 @@ class AsyncClient(BaseClient):
         """Close the connection pool of the current inner client."""
         await self.client.aclose()
 
-    async def request(self, request: AnetApiRequest, response_container: AnetApiResponse) -> SyncAsync[AnetApiResponse]:
+    async def request(self, request: Union[AnetApiRequest, BaseModel], response_container: Type[R]) -> R:
         http_request = self._build_request(request)
         http_response = await self.client.send(http_request)
         http_response.raise_for_status()

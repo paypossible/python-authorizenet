@@ -4,7 +4,7 @@ from xsdata.formats.dataclass.serializers.config import SerializerConfig
 
 from .context import context
 
-config = SerializerConfig(indent=4)
+config = SerializerConfig(indent="    ")
 default_xml_serializer = XmlSerializer(context=context)
 pretty_print_xml_serializer = XmlSerializer(config=config, context=context)
 

@@ -10,6 +10,7 @@ poetry run pytest               # Run tests (parallel via pytest-xdist, -n auto)
 poetry run pytest tests/test_transactions.py::test_sync_charge_credit_card  # Single test
 poetry run black .              # Format (120 char line length, target py312)
 flake8                          # Lint (max-line-length 120, max-complexity 10)
+poetry run mypy authorizenet    # Type check (pydantic plugin enabled, schema.py excluded)
 ```
 
 ## Project Structure
@@ -30,7 +31,7 @@ tests/
   conftest.py       # Fixtures: sync_client, async_client, httpx_mock_response (indirect parametrize)
   constants.py      # Fake credentials and IDs for tests
   data/             # 100+ XML fixture files (request/response pairs for mocked tests)
-  test_*.py         # 9 test modules, 92 tests total (46 sync + 46 async)
+  test_*.py         # 12 test modules, 112 tests total (56 sync + 56 async)
 ```
 
 ## Architecture
@@ -134,21 +135,24 @@ Request objects are defined as `scope="module"`, `autouse=True` fixtures. They c
 
 ### Test Coverage
 
-92 tests (46 sync + 46 async) across 9 test modules:
+112 tests (56 sync + 56 async) across 12 test modules:
 
 | Module | Operations Tested |
 |--------|-------------------|
-| `test_transactions.py` | auth, capture, charge, refund, void, debit bank account, credit bank account, charge customer profile, charge tokenized card, accept nonce, get details, list, list for customer, list unsettled, update held, update split tender |
-| `test_customer_profiles.py` | create, create from transaction, delete, get, get IDs, update |
+| `test_transactions.py` | auth, capture, charge, refund, void, debit bank account, credit bank account, charge customer profile, charge tokenized card, accept nonce, get details, list, list for customer, list unsettled, update held, update split tender, send receipt |
+| `test_customer_profiles.py` | create, create from transaction, create transaction, delete, get, get IDs, update |
 | `test_customer_payment_profiles.py` | create, delete, get, list, update, validate |
 | `test_customer_shipping_addresses.py` | create, delete, get, update |
 | `test_subscriptions.py` | create, create from profile, get, get status, update, cancel, list |
 | `test_batches.py` | get statistics, list settled |
 | `test_account_updater_jobs.py` | get details, get summary |
-| `test_merchants.py` | get |
+| `test_merchants.py` | get, update |
 | `test_hosted_pages.py` | get payment page, get profile page |
+| `test_misc.py` | test authenticate, logout, decrypt payment data, is alive |
+| `test_mobile_devices.py` | login, register |
+| `test_secure_payment_containers.py` | create |
 
-**Not covered:** mobile devices (login/register), secure payment containers (create), merchant update, customer profile create_transaction, send transaction receipt, error response handling, decrypt payment data, is_alive, logout, test_authenticate.
+**Not covered:** error response handling (testing that `ErrorResponse` is returned on API errors).
 
 ## Adding a New Operation Test
 
@@ -174,3 +178,5 @@ Request objects are defined as `scope="module"`, `autouse=True` fixtures. They c
 | `pytest` (dev) | Test framework |
 | `pytest-asyncio` (dev) | Async test support, auto mode |
 | `pytest-httpx` (dev) | httpx response mocking |
+| `mypy` (dev) | Static type checker (Python >=3.10 only) |
+| `pydantic[mypy]` (dev) | Pydantic mypy plugin for model-aware type checking |
