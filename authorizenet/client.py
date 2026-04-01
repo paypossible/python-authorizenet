@@ -96,18 +96,16 @@ class BaseClient:
         self.logger = options.logger or make_console_logger()
         self.logger.setLevel(options.log_level)
 
-        self.merchant_authentication: MerchantAuthenticationType = (
-            MerchantAuthenticationType(
-                name=options.login_id,
-                transaction_key=options.transaction_key,
-                session_token=options.session_token,
-                password=options.password,
-                impersonation_authentication=options.impersonation_authentication,
-                finger_print=options.finger_print,
-                client_key=options.client_key,
-                access_token=options.access_token,
-                mobile_device_id=options.mobile_device_id,
-            )
+        self.merchant_authentication: MerchantAuthenticationType = MerchantAuthenticationType(
+            name=options.login_id,
+            transaction_key=options.transaction_key,
+            session_token=options.session_token,
+            password=options.password,
+            impersonation_authentication=options.impersonation_authentication,
+            finger_print=options.finger_print,
+            client_key=options.client_key,
+            access_token=options.access_token,
+            mobile_device_id=options.mobile_device_id,
         )
 
         self._clients: List[Union[httpx.Client, httpx.AsyncClient]] = []
@@ -143,9 +141,7 @@ class BaseClient:
         )
         self._clients.append(client)
 
-    def _build_request(
-        self, request: Union[AnetApiRequest, BaseModel]
-    ) -> httpx.Request:
+    def _build_request(self, request: Union[AnetApiRequest, BaseModel]) -> httpx.Request:
         if isinstance(request, AnetApiRequest):
             request.merchant_authentication = self.merchant_authentication
         content = serialize_xml(request)
@@ -153,9 +149,7 @@ class BaseClient:
         self.logger.debug(f"=> {str(content)}")
         return self.client.build_request("POST", "", content=content)
 
-    def _parse_response(
-        self, response: httpx.Response, response_container: Type[R]
-    ) -> R:
+    def _parse_response(self, response: httpx.Response, response_container: Type[R]) -> R:
         self.logger.debug(f"<= {response.text}")
         try:
             result = cast(R, parse_xml(response.content, response_container))
@@ -170,9 +164,7 @@ class BaseClient:
         return result
 
     @abc.abstractmethod
-    def request(
-        self, request: Union[AnetApiRequest, BaseModel], response_container: Type[R]
-    ) -> SyncAsync[R]:
+    def request(self, request: Union[AnetApiRequest, BaseModel], response_container: Type[R]) -> SyncAsync[R]:
         raise NotImplementedError
 
 
@@ -209,9 +201,7 @@ class Client(BaseClient):
         """Close the connection pool of the current inner client."""
         self.client.close()
 
-    def request(
-        self, request: Union[AnetApiRequest, BaseModel], response_container: Type[R]
-    ) -> R:
+    def request(self, request: Union[AnetApiRequest, BaseModel], response_container: Type[R]) -> R:
         http_request = self._build_request(request)
         http_response = self.client.send(http_request)
         http_response.raise_for_status()
@@ -251,9 +241,7 @@ class AsyncClient(BaseClient):
         """Close the connection pool of the current inner client."""
         await self.client.aclose()
 
-    async def request(
-        self, request: Union[AnetApiRequest, BaseModel], response_container: Type[R]
-    ) -> R:
+    async def request(self, request: Union[AnetApiRequest, BaseModel], response_container: Type[R]) -> R:
         http_request = self._build_request(request)
         http_response = await self.client.send(http_request)
         http_response.raise_for_status()
