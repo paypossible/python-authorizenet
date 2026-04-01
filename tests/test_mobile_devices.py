@@ -24,13 +24,15 @@ def mobile_device_registration_request():
 @pytest.mark.parametrize("httpx_mock_response", ["mobile_device_login_response.xml"], indirect=True)
 def test_sync_mobile_device_login(httpx_mock_response, sync_client, mobile_device_login_request):
     response = sync_client.mobile_devices.login(mobile_device_login_request)
-    assert isinstance(response, (authorizenet.MobileDeviceLoginResponse, authorizenet.ErrorResponse))
+    assert isinstance(response, authorizenet.MobileDeviceLoginResponse)
+    assert response.messages.result_code == authorizenet.MessageTypeEnum.OK
 
 
 @pytest.mark.parametrize("httpx_mock_response", ["mobile_device_login_response.xml"], indirect=True)
 async def test_async_mobile_device_login(httpx_mock_response, async_client, mobile_device_login_request):
     response = await async_client.mobile_devices.login(mobile_device_login_request)
-    assert isinstance(response, (authorizenet.MobileDeviceLoginResponse, authorizenet.ErrorResponse))
+    assert isinstance(response, authorizenet.MobileDeviceLoginResponse)
+    assert response.messages.result_code == authorizenet.MessageTypeEnum.OK
 
 
 # Mobile device registration tests

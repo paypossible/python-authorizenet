@@ -31,7 +31,7 @@ tests/
   conftest.py       # Fixtures: sync_client, async_client, httpx_mock_response (indirect parametrize)
   constants.py      # Fake credentials and IDs for tests
   data/             # 100+ XML fixture files (request/response pairs for mocked tests)
-  test_*.py         # 12 test modules, 112 tests total (56 sync + 56 async)
+  test_*.py         # 13 test modules, 117 tests total
 ```
 
 ## Architecture
@@ -79,7 +79,12 @@ The client exposes 12 operation groups as properties, each inheriting from `Oper
 
 ### Error Handling
 
-In `_parse_response()` (`client.py:145-152`), if the response XML fails pydantic validation for the expected response type, a `ValidationError` is caught and the response is re-parsed as `ErrorResponse`. Callers should check `isinstance(response, ErrorResponse)` or inspect `response.messages.result_code` (`MessageTypeEnum.OK` vs `MessageTypeEnum.ERROR`).
+`_parse_response()` (`client.py:156-170`) raises `AuthorizeNetError` (`exceptions.py`) in two cases:
+
+1. **API error**: After successful XML parsing, if `result.messages.result_code == MessageTypeEnum.ERROR`, raises with the parsed response.
+2. **Parse failure**: If pydantic `ValidationError` occurs, re-parses as `ErrorResponse` and raises.
+
+The exception exposes `.code` (first error code), `.message` (first error text), and `.response` (full parsed response object). Operation return types are the success type only (no `Union[..., ErrorResponse]`).
 
 HTTP-level errors are raised via `httpx.Response.raise_for_status()` before parsing.
 
@@ -127,7 +132,7 @@ Request objects are defined as `scope="module"`, `autouse=True` fixtures. They c
 
 ### Test Coverage
 
-112 tests (56 sync + 56 async) across 12 test modules:
+117 tests across 13 test modules:
 
 | Module | Operations Tested |
 |--------|-------------------|
@@ -143,8 +148,9 @@ Request objects are defined as `scope="module"`, `autouse=True` fixtures. They c
 | `test_misc.py` | test authenticate, logout, decrypt payment data, is alive |
 | `test_mobile_devices.py` | login, register |
 | `test_secure_payment_containers.py` | create |
+| `test_errors.py` | AuthorizeNetError on API errors, exception attributes, success regression |
 
-**Not covered:** error response handling (testing that `ErrorResponse` is returned on API errors).
+All API operations and error handling are covered.
 
 ## Adding a New Operation Test
 
@@ -157,7 +163,7 @@ Request objects are defined as `scope="module"`, `autouse=True` fixtures. They c
 ## Adding a New API Operation
 
 1. Find the request/response types in `schema.py` (they likely already exist for the full Authorize.Net API)
-2. Add a method to the appropriate operation class in `operation.py` following the pattern: accept typed request, return `SyncAsync[Union[ResponseType, ErrorResponse]]`, delegate to `self.parent.request()`
+2. Add a method to the appropriate operation class in `operation.py` following the pattern: accept typed request, return `SyncAsync[ResponseType]`, delegate to `self.parent.request()`
 3. If a new operation group is needed: create a class inheriting `Operation` in `operation.py`, add it as a property in `BaseClient.__init__()` (`client.py:109-120`), import it in `client.py`
 
 ## Dependencies

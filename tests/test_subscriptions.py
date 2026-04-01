@@ -174,14 +174,16 @@ async def test_async_subscription_get(httpx_mock_response, async_client, get_sub
 
 @pytest.mark.parametrize("httpx_mock_response", ["get_subscription_status_response.xml"], indirect=True)
 def test_sync_subscription_get_status(httpx_mock_response, sync_client, get_subscription_status_request):
-    response = sync_client.subscriptions.get_status(get_subscription_status_request)
-    assert isinstance(response, (authorizenet.ArbgetSubscriptionStatusResponse, authorizenet.ErrorResponse))
+    with pytest.raises(authorizenet.AuthorizeNetError) as exc_info:
+        sync_client.subscriptions.get_status(get_subscription_status_request)
+    assert exc_info.value.code == "E00035"
 
 
 @pytest.mark.parametrize("httpx_mock_response", ["get_subscription_status_response.xml"], indirect=True)
 async def test_async_subscription_get_status(httpx_mock_response, async_client, get_subscription_status_request):
-    response = await async_client.subscriptions.get_status(get_subscription_status_request)
-    assert isinstance(response, (authorizenet.ArbgetSubscriptionStatusResponse, authorizenet.ErrorResponse))
+    with pytest.raises(authorizenet.AuthorizeNetError) as exc_info:
+        await async_client.subscriptions.get_status(get_subscription_status_request)
+    assert exc_info.value.code == "E00035"
 
 
 # Update subscription tests

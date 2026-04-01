@@ -409,25 +409,23 @@ client.misc.decrypt_payment_data(request)  # Decrypt payment data
 
 ### Error Handling
 
-All operation methods may return an `ErrorResponse` instead of the expected response
-type. Check the result code to determine if the request succeeded:
+When the Authorize.Net API returns an error, an `AuthorizeNetError` exception is raised:
 
 ```python
-response = client.transactions.create(request)
-
-if response.messages.result_code == authorizenet.MessageTypeEnum.OK:
-    print("Success!")
-else:
-    for message in response.messages.message:
-        print(f"Error {message.code}: {message.text}")
+try:
+    response = client.transactions.create(request)
+    print(f"Transaction {response.transaction_response.trans_id} approved")
+except authorizenet.AuthorizeNetError as e:
+    print(f"Error {e.code}: {e.message}")
+    # Access the full response object for details:
+    # e.response.messages.message[0].code
+    # e.response.messages.message[0].text
 ```
 
-Or check the response type directly:
-
-```python
-if isinstance(response, authorizenet.ErrorResponse):
-    print("Request failed")
-```
+The exception provides:
+- `e.code` -- the first error code (e.g., `"E00035"`)
+- `e.message` -- the first error message text
+- `e.response` -- the full parsed response object
 
 HTTP-level errors (4xx/5xx) are raised as `httpx.HTTPStatusError` exceptions.
 

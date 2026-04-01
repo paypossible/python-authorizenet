@@ -10,6 +10,7 @@ import httpx
 import pydantic
 from pydantic import BaseModel
 
+from .exceptions import AuthorizeNetError
 from .logger import make_console_logger
 from .operation import (
     AccountUpdaterJob,
@@ -33,6 +34,7 @@ from .schema import (
     FingerPrintType,
     ImpersonationAuthenticationType,
     MerchantAuthenticationType,
+    MessageTypeEnum,
 )
 from .serializer import serialize_xml
 from .typing import SyncAsync
@@ -156,11 +158,16 @@ class BaseClient:
     ) -> R:
         self.logger.debug(f"<= {response.text}")
         try:
-            return cast(R, parse_xml(response.content, response_container))
-        except pydantic.ValidationError as e:
+            result = cast(R, parse_xml(response.content, response_container))
+        except pydantic.ValidationError:
             self.logger.error(f"<= {response.text}")
-            self.logger.debug(e)
-            return cast(R, parse_xml(response.content, ErrorResponse))
+            error_result = cast(ErrorResponse, parse_xml(response.content, ErrorResponse))
+            raise AuthorizeNetError(error_result)
+
+        if result.messages.result_code == MessageTypeEnum.ERROR:
+            raise AuthorizeNetError(result)
+
+        return result
 
     @abc.abstractmethod
     def request(

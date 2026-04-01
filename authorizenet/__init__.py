@@ -1,4 +1,5 @@
 from .client import AsyncClient, Client
+from .exceptions import AuthorizeNetError
 from .schema import (
     AccountTypeEnum,
     AfdsTransactionEnum,
@@ -265,6 +266,7 @@ from .serializer import serialize_xml
 __all__ = [
     "parse_xml",
     "serialize_xml",
+    "AuthorizeNetError",
     "AccountTypeEnum",
     "AfdsTransactionEnum",
     "AnetApiRequest",

@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Union
+from typing import TYPE_CHECKING
 
 from .schema import (
     ArbcancelSubscriptionRequest,
@@ -34,7 +34,6 @@ from .schema import (
     DeleteCustomerProfileResponse,
     DeleteCustomerShippingAddressRequest,
     DeleteCustomerShippingAddressResponse,
-    ErrorResponse,
     GetAujobDetailsRequest,
     GetAujobDetailsResponse,
     GetAujobSummaryRequest,
@@ -110,7 +109,7 @@ class CustomerProfile(Operation):
     def create(
         self,
         request: CreateCustomerProfileRequest,
-    ) -> SyncAsync[Union[CreateCustomerProfileResponse, ErrorResponse]]:
+    ) -> SyncAsync[CreateCustomerProfileResponse]:
         """
         Use this method to create a new customer profile including any customer payment profiles and customer shipping
         addresses.
@@ -120,7 +119,7 @@ class CustomerProfile(Operation):
     def create_from_transaction(
         self,
         request: CreateCustomerProfileFromTransactionRequest,
-    ) -> SyncAsync[Union[CreateCustomerProfileResponse, ErrorResponse]]:
+    ) -> SyncAsync[CreateCustomerProfileResponse]:
         """
         This request enables you to create a customer profile, payment profile, and shipping profile from an existing
         successful transaction.
@@ -130,13 +129,13 @@ class CustomerProfile(Operation):
     def create_transaction(
         self,
         request: CreateCustomerProfileTransactionRequest,
-    ) -> SyncAsync[Union[CreateCustomerProfileTransactionResponse, ErrorResponse]]:
+    ) -> SyncAsync[CreateCustomerProfileTransactionResponse]:
         return self.parent.request(request, CreateCustomerProfileTransactionResponse)
 
     def delete(
         self,
         request: DeleteCustomerProfileRequest,
-    ) -> SyncAsync[Union[DeleteCustomerProfileResponse, ErrorResponse]]:
+    ) -> SyncAsync[DeleteCustomerProfileResponse]:
         """
         Use this method to delete an existing customer profile along with all associated customer payment profiles and
         customer shipping addresses.
@@ -146,7 +145,7 @@ class CustomerProfile(Operation):
     def get(
         self,
         request: GetCustomerProfileRequest,
-    ) -> SyncAsync[Union[GetCustomerProfileResponse, ErrorResponse]]:
+    ) -> SyncAsync[GetCustomerProfileResponse]:
         """
         Use this method to retrieve an existing customer profile along with all the associated payment profiles and
         shipping addresses.
@@ -156,7 +155,7 @@ class CustomerProfile(Operation):
     def get_ids(
         self,
         request: GetCustomerProfileIdsRequest,
-    ) -> SyncAsync[Union[GetCustomerProfileIdsResponse, ErrorResponse]]:
+    ) -> SyncAsync[GetCustomerProfileIdsResponse]:
         """
         Use this method to retrieve all existing customer profile IDs.
         """
@@ -165,7 +164,7 @@ class CustomerProfile(Operation):
     def update(
         self,
         request: UpdateCustomerProfileRequest,
-    ) -> SyncAsync[Union[UpdateCustomerProfileResponse, ErrorResponse]]:
+    ) -> SyncAsync[UpdateCustomerProfileResponse]:
         """
         Use this method to update an existing customer profile.
         """
@@ -176,7 +175,7 @@ class CustomerPaymentProfile(Operation):
     def create(
         self,
         request: CreateCustomerPaymentProfileRequest,
-    ) -> SyncAsync[Union[CreateCustomerPaymentProfileResponse, ErrorResponse]]:
+    ) -> SyncAsync[CreateCustomerPaymentProfileResponse]:
         """
         Use this method to create a new customer payment profile for an existing customer profile.
         """
@@ -185,7 +184,7 @@ class CustomerPaymentProfile(Operation):
     def delete(
         self,
         request: DeleteCustomerPaymentProfileRequest,
-    ) -> SyncAsync[Union[DeleteCustomerPaymentProfileResponse, ErrorResponse]]:
+    ) -> SyncAsync[DeleteCustomerPaymentProfileResponse]:
         """
         Use this method to delete a customer payment profile from an existing customer profile.
         """
@@ -194,7 +193,7 @@ class CustomerPaymentProfile(Operation):
     def get(
         self,
         request: GetCustomerPaymentProfileRequest,
-    ) -> SyncAsync[Union[GetCustomerPaymentProfileResponse, ErrorResponse]]:
+    ) -> SyncAsync[GetCustomerPaymentProfileResponse]:
         """
         Use this method to retrieve the details of a customer payment profile associated with an existing customer
         profile.
@@ -204,13 +203,13 @@ class CustomerPaymentProfile(Operation):
     def get_nonce(
         self,
         request: GetCustomerPaymentProfileNonceRequest,
-    ) -> SyncAsync[Union[GetCustomerPaymentProfileNonceResponse, ErrorResponse]]:
+    ) -> SyncAsync[GetCustomerPaymentProfileNonceResponse]:
         return self.parent.request(request, GetCustomerPaymentProfileNonceResponse)
 
     def list(
         self,
         request: GetCustomerPaymentProfileListRequest,
-    ) -> SyncAsync[Union[GetCustomerPaymentProfileListResponse, ErrorResponse]]:
+    ) -> SyncAsync[GetCustomerPaymentProfileListResponse]:
         """
         Use this method to get list of all the payment profiles that match the submitted searchType. You can use this
         method to get the list of all cards expiring this month. The method will return up to 10 results in a
@@ -222,7 +221,7 @@ class CustomerPaymentProfile(Operation):
     def update(
         self,
         request: UpdateCustomerPaymentProfileRequest,
-    ) -> SyncAsync[Union[UpdateCustomerPaymentProfileResponse, ErrorResponse]]:
+    ) -> SyncAsync[UpdateCustomerPaymentProfileResponse]:
         """
         Use this method to update a payment profile for an existing customer profile.
         """
@@ -231,7 +230,7 @@ class CustomerPaymentProfile(Operation):
     def validate(
         self,
         request: ValidateCustomerPaymentProfileRequest,
-    ) -> SyncAsync[Union[ValidateCustomerPaymentProfileResponse, ErrorResponse]]:
+    ) -> SyncAsync[ValidateCustomerPaymentProfileResponse]:
         """
         Use this method to generate a test transaction that verifies an existing customer payment profile. No customer
         receipt emails are sent when this method is called.
@@ -243,7 +242,7 @@ class CustomerShippingAddress(Operation):
     def create(
         self,
         request: CreateCustomerShippingAddressRequest,
-    ) -> SyncAsync[Union[CreateCustomerShippingAddressResponse, ErrorResponse]]:
+    ) -> SyncAsync[CreateCustomerShippingAddressResponse]:
         """
         Use this method to create a new customer shipping address for an existing customer profile.
         """
@@ -252,7 +251,7 @@ class CustomerShippingAddress(Operation):
     def delete(
         self,
         request: DeleteCustomerShippingAddressRequest,
-    ) -> SyncAsync[Union[DeleteCustomerShippingAddressResponse, ErrorResponse]]:
+    ) -> SyncAsync[DeleteCustomerShippingAddressResponse]:
         """
         Use this method to delete a customer shipping address from an existing customer profile.
         """
@@ -261,7 +260,7 @@ class CustomerShippingAddress(Operation):
     def get(
         self,
         request: GetCustomerShippingAddressRequest,
-    ) -> SyncAsync[Union[GetCustomerShippingAddressResponse, ErrorResponse]]:
+    ) -> SyncAsync[GetCustomerShippingAddressResponse]:
         """
         Use this method to retrieve the details of a customer shipping address associated with an existing customer
         profile.
@@ -271,7 +270,7 @@ class CustomerShippingAddress(Operation):
     def update(
         self,
         request: UpdateCustomerShippingAddressRequest,
-    ) -> SyncAsync[Union[UpdateCustomerShippingAddressResponse, ErrorResponse]]:
+    ) -> SyncAsync[UpdateCustomerShippingAddressResponse]:
         """
         Use this method to update a shipping address for an existing customer profile.
         """
@@ -282,13 +281,13 @@ class Transaction(Operation):
     def create(
         self,
         request: CreateTransactionRequest,
-    ) -> SyncAsync[Union[CreateTransactionResponse, ErrorResponse]]:
+    ) -> SyncAsync[CreateTransactionResponse]:
         return self.parent.request(request, CreateTransactionResponse)
 
     def get(
         self,
         request: GetTransactionDetailsRequest,
-    ) -> SyncAsync[Union[GetTransactionDetailsResponse, ErrorResponse]]:
+    ) -> SyncAsync[GetTransactionDetailsResponse]:
         """
         Use this method to get detailed information about a specific transaction.
         """
@@ -297,7 +296,7 @@ class Transaction(Operation):
     def list(
         self,
         request: GetTransactionListRequest,
-    ) -> SyncAsync[Union[GetTransactionListResponse, ErrorResponse]]:
+    ) -> SyncAsync[GetTransactionListResponse]:
         """
         Use this method to return data for all transactions in a specified batch. The function will return data for up
         to 1000 of the most recent transactions in a single request. Paging options can be sent to limit the result set
@@ -310,7 +309,7 @@ class Transaction(Operation):
     def list_for_customer(
         self,
         request: GetTransactionListForCustomerRequest,
-    ) -> SyncAsync[Union[GetTransactionListResponse, ErrorResponse]]:
+    ) -> SyncAsync[GetTransactionListResponse]:
         """
         Use this method to retrieve transactions for a specific customer profile or customer payment profile. The
         method will return data for up to 1000 of the most recent transactions in a single request. Paging options can
@@ -325,7 +324,7 @@ class Transaction(Operation):
     def list_unsettled(
         self,
         request: GetUnsettledTransactionListRequest,
-    ) -> SyncAsync[Union[GetUnsettledTransactionListResponse, ErrorResponse]]:
+    ) -> SyncAsync[GetUnsettledTransactionListResponse]:
         """
         Use this method to get data for unsettled transactions. The method will return data for up to 1000 of the most
         recent transactions in a single request. Paging options can be sent to limit the result set or to retrieve
@@ -337,13 +336,13 @@ class Transaction(Operation):
     def send_receipt(
         self,
         request: SendCustomerTransactionReceiptRequest,
-    ) -> SyncAsync[Union[SendCustomerTransactionReceiptResponse, ErrorResponse]]:
+    ) -> SyncAsync[SendCustomerTransactionReceiptResponse]:
         return self.parent.request(request, SendCustomerTransactionReceiptResponse)
 
     def update_held(
         self,
         request: UpdateHeldTransactionRequest,
-    ) -> SyncAsync[Union[UpdateHeldTransactionResponse, ErrorResponse]]:
+    ) -> SyncAsync[UpdateHeldTransactionResponse]:
         """
         Approve or Decline a held Transaction.
         """
@@ -352,7 +351,7 @@ class Transaction(Operation):
     def update_split_tender_group(
         self,
         request: UpdateSplitTenderGroupRequest,
-    ) -> SyncAsync[Union[UpdateSplitTenderGroupResponse, ErrorResponse]]:
+    ) -> SyncAsync[UpdateSplitTenderGroupResponse]:
         """
         Use this method to update the status of an existing order that contains multiple transactions with the same
         splitTenderId  value.
@@ -364,7 +363,7 @@ class AccountUpdaterJob(Operation):
     def get_details(
         self,
         request: GetAujobDetailsRequest,
-    ) -> SyncAsync[Union[GetAujobDetailsResponse, ErrorResponse]]:
+    ) -> SyncAsync[GetAujobDetailsResponse]:
         """
         Use this method to get details of each card updated or deleted by the Account Updater process for a particular
         month. The method will return data for up to 1000 of the most recent transactions in a single request. Paging
@@ -377,7 +376,7 @@ class AccountUpdaterJob(Operation):
     def get_summary(
         self,
         request: GetAujobSummaryRequest,
-    ) -> SyncAsync[Union[GetAujobSummaryResponse, ErrorResponse]]:
+    ) -> SyncAsync[GetAujobSummaryResponse]:
         """
         Use this method to get a summary of the results of the Account Updater process for a particular month.
         """
@@ -388,7 +387,7 @@ class Batch(Operation):
     def get_statistics(
         self,
         request: GetBatchStatisticsRequest,
-    ) -> SyncAsync[Union[GetBatchStatisticsResponse, ErrorResponse]]:
+    ) -> SyncAsync[GetBatchStatisticsResponse]:
         """
         A call to getBatchStatisticsRequest returns statistics for a single batch, specified by the batch ID.
         """
@@ -397,7 +396,7 @@ class Batch(Operation):
     def list_settled(
         self,
         request: GetSettledBatchListRequest,
-    ) -> SyncAsync[Union[GetSettledBatchListResponse, ErrorResponse]]:
+    ) -> SyncAsync[GetSettledBatchListResponse]:
         """
         This method returns Batch ID, Settlement Time, & Settlement State for all settled batches with a range of dates.
         If includeStatistics  is  true, you also receive batch statistics by payment type and batch totals. All input
@@ -411,7 +410,7 @@ class HostedPage(Operation):
     def get_payment_page(
         self,
         request: GetHostedPaymentPageRequest,
-    ) -> SyncAsync[Union[GetHostedPaymentPageResponse, ErrorResponse]]:
+    ) -> SyncAsync[GetHostedPaymentPageResponse]:
         """
         Use this method to retrieve a form token which can be used to request the Authorize.net Accept hosted payment
         page.
@@ -421,7 +420,7 @@ class HostedPage(Operation):
     def get_profile_page(
         self,
         request: GetHostedProfilePageRequest,
-    ) -> SyncAsync[Union[GetHostedProfilePageResponse, ErrorResponse]]:
+    ) -> SyncAsync[GetHostedProfilePageResponse]:
         """
         Use this method to initiate a request for direct access to the Authorize.net website.
         """
@@ -432,7 +431,7 @@ class Merchant(Operation):
     def get(
         self,
         request: GetMerchantDetailsRequest,
-    ) -> SyncAsync[Union[GetMerchantDetailsResponse, ErrorResponse]]:
+    ) -> SyncAsync[GetMerchantDetailsResponse]:
         """
         Call this method and supply your authentication information to receive merchant details in the response. The
         information that is returned is helpful for OAuth and Accept integrations. Generate a PublicClientKey only if
@@ -443,7 +442,7 @@ class Merchant(Operation):
     def update(
         self,
         request: UpdateMerchantDetailsRequest,
-    ) -> SyncAsync[Union[UpdateMerchantDetailsResponse, ErrorResponse]]:
+    ) -> SyncAsync[UpdateMerchantDetailsResponse]:
         return self.parent.request(request, UpdateMerchantDetailsResponse)
 
 
@@ -451,13 +450,13 @@ class MobileDevice(Operation):
     def login(
         self,
         request: MobileDeviceLoginRequest,
-    ) -> SyncAsync[Union[MobileDeviceLoginResponse, ErrorResponse]]:
+    ) -> SyncAsync[MobileDeviceLoginResponse]:
         return self.parent.request(request, MobileDeviceLoginResponse)
 
     def register(
         self,
         request: MobileDeviceRegistrationRequest,
-    ) -> SyncAsync[Union[MobileDeviceRegistrationResponse, ErrorResponse]]:
+    ) -> SyncAsync[MobileDeviceRegistrationResponse]:
         return self.parent.request(request, MobileDeviceRegistrationResponse)
 
 
@@ -465,7 +464,7 @@ class SecurePaymentContainer(Operation):
     def create(
         self,
         request: SecurePaymentContainerRequest,
-    ) -> SyncAsync[Union[SecurePaymentContainerResponse, ErrorResponse]]:
+    ) -> SyncAsync[SecurePaymentContainerResponse]:
         return self.parent.request(request, SecurePaymentContainerResponse)
 
 
@@ -473,37 +472,37 @@ class Subscription(Operation):
     def cancel(
         self,
         request: ArbcancelSubscriptionRequest,
-    ) -> SyncAsync[Union[ArbcancelSubscriptionResponse, ErrorResponse]]:
+    ) -> SyncAsync[ArbcancelSubscriptionResponse]:
         return self.parent.request(request, ArbcancelSubscriptionResponse)
 
     def create(
         self,
         request: ArbcreateSubscriptionRequest,
-    ) -> SyncAsync[Union[ArbcreateSubscriptionResponse, ErrorResponse]]:
+    ) -> SyncAsync[ArbcreateSubscriptionResponse]:
         return self.parent.request(request, ArbcreateSubscriptionResponse)
 
     def get(
         self,
         request: ArbgetSubscriptionRequest,
-    ) -> SyncAsync[Union[ArbgetSubscriptionResponse, ErrorResponse]]:
+    ) -> SyncAsync[ArbgetSubscriptionResponse]:
         return self.parent.request(request, ArbgetSubscriptionResponse)
 
     def get_status(
         self,
         request: ArbgetSubscriptionStatusRequest,
-    ) -> SyncAsync[Union[ArbgetSubscriptionStatusResponse, ErrorResponse]]:
+    ) -> SyncAsync[ArbgetSubscriptionStatusResponse]:
         return self.parent.request(request, ArbgetSubscriptionStatusResponse)
 
     def list(
         self,
         request: ArbgetSubscriptionListRequest,
-    ) -> SyncAsync[Union[ArbgetSubscriptionListResponse, ErrorResponse]]:
+    ) -> SyncAsync[ArbgetSubscriptionListResponse]:
         return self.parent.request(request, ArbgetSubscriptionListResponse)
 
     def update(
         self,
         request: ArbupdateSubscriptionRequest,
-    ) -> SyncAsync[Union[ArbupdateSubscriptionResponse, ErrorResponse]]:
+    ) -> SyncAsync[ArbupdateSubscriptionResponse]:
         return self.parent.request(request, ArbupdateSubscriptionResponse)
 
 
@@ -511,23 +510,23 @@ class Misc(Operation):
     def decrypt_payment_data(
         self,
         request: DecryptPaymentDataRequest,
-    ) -> SyncAsync[Union[DecryptPaymentDataResponse, ErrorResponse]]:
+    ) -> SyncAsync[DecryptPaymentDataResponse]:
         return self.parent.request(request, DecryptPaymentDataResponse)
 
     def is_alive(
         self,
         request: IsAliveRequest,
-    ) -> SyncAsync[Union[IsAliveResponse, ErrorResponse]]:
+    ) -> SyncAsync[IsAliveResponse]:
         return self.parent.request(request, IsAliveResponse)
 
     def logout(
         self,
         request: LogoutRequest,
-    ) -> SyncAsync[Union[LogoutResponse, ErrorResponse]]:
+    ) -> SyncAsync[LogoutResponse]:
         return self.parent.request(request, LogoutResponse)
 
     def test_authenticate(
         self,
         request: AuthenticateTestRequest,
-    ) -> SyncAsync[Union[AuthenticateTestResponse, ErrorResponse]]:
+    ) -> SyncAsync[AuthenticateTestResponse]:
         return self.parent.request(request, AuthenticateTestResponse)

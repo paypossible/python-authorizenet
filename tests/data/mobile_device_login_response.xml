@@ -7,4 +7,12 @@
             <text>Successful.</text>
         </message>
     </messages>
+    <merchantContact>
+        <merchantName>Test Merchant</merchantName>
+    </merchantContact>
+    <userPermissions>
+        <permission>
+            <permissionName>API_Merchant_BasicReporting</permissionName>
+        </permission>
+    </userPermissions>
 </mobileDeviceLoginResponse>
